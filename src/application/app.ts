@@ -43,7 +43,7 @@ import "../plugin/TMDB"
 function library (request: any, response: any, next: any) {
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true
 	request.organic = function () { return ! request.visitor ["agent:crawler"] }
-	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"])
+	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"], request)
 	}
 
 /**
@@ -85,19 +85,17 @@ app.start (async function (request: any, response: any, next: any) {
 app.get ("/", async function (request: any, response: any, next: any) {
 	var html = []
 	if (request.organic ()) {
-		var netflix = new php.plugin.netflix (request.var ["TMDB:api"])
-		var data = await netflix.movie.popular ({page: 1})
+		var data = await request.TMDB.movie.popular ({page: 1})
 		html.push ('<div style="display: flex">');
-		for (var i in data.results) {
-			var img = php.plugin.netflix.image.src (data.results [i].poster_path);
+		for (var i in data.list) {
 			html.push (`<div>
-			<div>Title : ${data.results[i].title}</div>
-			<div><img height="150" src="${img}"></div>
+			<div>Title : ${data.list [i].title}</div>
+			<div><img height="150" src="${data.list [i].poster}"></div>
 			</div>`);
 			}
 		html.push ("</div>")
 		}
-	return response (html.join (""))
+	return response (php.html ["output"] (html.join ("")))
 	})
 
 /**

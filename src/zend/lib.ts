@@ -1,7 +1,5 @@
 import php from "../zend/engine";
 
-php.is_array = function (input) { return Array.isArray (input); }
-
 php.parse_url = function (input: string) {
 	var url = new URL (input);
 	return {

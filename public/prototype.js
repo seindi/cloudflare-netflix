@@ -1,5 +1,3 @@
-var _ = require ("lodash");
-
 function Define ($, key, value, option = {}) { Object.defineProperty ($, key, {enumerable: (option.enumerable || false), configurable: (option.configurable || false), writable: (option.writable || false), value}); }
 Define.property = function ($, key, value, option) { Define ($.prototype, key, value, option); }
 
@@ -95,29 +93,29 @@ Function.html.output = function (body) {
 	var html = [`<!DOCTYPE html>`];
 	html.push (`<html lang="en" translate="no" class="notranslate" prefix="og: http://ogp.me/ns#">`);
 	html.push (("\t") + `<head profile="#">`);
-	html.pushed (2, `<title></title>`);
-	html.pushed (2, `<meta http-equiv="X-UA-Compatible" content="IE=edge">`);
-	html.pushed (2, `<meta http-equiv="X-Cross-Origin" content="*">`);
-	html.pushed (2, `<meta charset="UTF-8">`);
-	html.pushed (2, `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1">`);
-	html.pushed (2, `<meta name="author" content="">`);
-	html.pushed (2, `<meta name="generator" content="">`);
-	html.pushed (2, `<meta name="keywords" content="">`);
-	html.pushed (2, `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">`);
-	html.pushed (2, `<meta name="description" content="">`);
-	html.pushed (2, `<meta name="google" content="notranslate">`);
-	html.pushed (2, `<meta name="googlebot" content="notranslate">`);
-	html.pushed (2, `<meta name="googlebot-news" content="index, follow">`);
-	html.pushed (2, `<meta name="twitter:card" content="summary_large_image">`);
-	html.pushed (2, `<meta property="article:published_time" content="">`);
-	html.pushed (2, `<meta property="article:modified_time" content="">`);
-	html.pushed (2, `<meta property="og:site_name" content="">`);
-	html.pushed (2, `<meta property="og:title" content="">`);
-	html.pushed (2, `<meta property="og:description" content="">`);
-	html.pushed (2, `<meta property="og:url" content="">`);
-	html.pushed (2, `<meta property="og:image" content="">`);
-	html.pushed (2, `<meta property="og:type" content="website">`);
-	html.pushed (2, `<meta property="og:locale" content="en_US"></meta>`);
+	html.push (("\t").repeat (2) + `<title></title>`);
+	html.push (("\t").repeat (2) + `<meta http-equiv="X-UA-Compatible" content="IE=edge">`);
+	html.push (("\t").repeat (2) + `<meta http-equiv="X-Cross-Origin" content="*">`);
+	html.push (("\t").repeat (2) + `<meta charset="UTF-8">`);
+	html.push (("\t").repeat (2) + `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1">`);
+	html.push (("\t").repeat (2) + `<meta name="author" content="">`);
+	html.push (("\t").repeat (2) + `<meta name="generator" content="">`);
+	html.push (("\t").repeat (2) + `<meta name="keywords" content="">`);
+	html.push (("\t").repeat (2) + `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">`);
+	html.push (("\t").repeat (2) + `<meta name="description" content="">`);
+	html.push (("\t").repeat (2) + `<meta name="google" content="notranslate">`);
+	html.push (("\t").repeat (2) + `<meta name="googlebot" content="notranslate">`);
+	html.push (("\t").repeat (2) + `<meta name="googlebot-news" content="index, follow">`);
+	html.push (("\t").repeat (2) + `<meta name="twitter:card" content="summary_large_image">`);
+	html.push (("\t").repeat (2) + `<meta property="article:published_time" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="article:modified_time" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:site_name" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:title" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:description" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:url" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:image" content="">`);
+	html.push (("\t").repeat (2) + `<meta property="og:type" content="website">`);
+	html.push (("\t").repeat (2) + `<meta property="og:locale" content="en_US"></meta>`);
 	html.pushed (2, `<link rel="profile" href="https://gmpg.org/xfn/11">`);
 	html.pushed (2, `<link rel="canonical" href="">`);
 	html.pushed (2, `<link rel="manifest" href="/manifest.json">`);
@@ -153,7 +151,7 @@ Function.html.output = function (body) {
 		html.pushed (2, `<script src="https://unpkg.com/lodash@4.17.21/core.min.js"></script>`);
 		html.pushed (2, `<script src="https://unpkg.com/vue@3.5.22/dist/vue.global.prod.js"></script>`);
 		html.pushed (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
-		html.pushed (2, `<script src="/prototype.js"></script>`);
+		html.pushed (2, `<script src="/theme/default/prototype.js"></script>`);
 		}
 	html.push (("\t") + `</head>`);
 	html.push (("\t") + `<body>`);
