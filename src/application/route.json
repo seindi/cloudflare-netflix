@@ -35,7 +35,15 @@
 "event": {"index": "/event/", "path": "/event/:path/"},
 "promo": {"index": "/promo/", "path": "/promo/:path/"},
 "play": "/play/:path", "watch": "/watch/:path",
-"__": {"discover": "/discover/", "popular": "/popular/", "trending": "/trending/", "editor-choice": "/editor-choice/", "now_playing": "/now_playing/", "top_rated": "/top_rated/", "up_coming": "/upcoming/"},
+"__": {
+	"discover": "/discover/",
+	"editor-choice": "/editor-choice/",
+	"trending": "/trending/", "trending:list": "/trending/list",
+	"popular": "/popular/", "popular:list": "/popular/list",
+	"now_playing": "/now_playing/",
+	"top_rated": "/top_rated/",
+	"up_coming": "/upcoming/"
+	},
 "cgi-bin": {"index": "/cgi-bin/"},
 "cpanel": {"index": "/cpanel/"},
 "path": "/:path{.+}",

@@ -91,18 +91,19 @@ URL.parse_url = function (input) {
 	}
 
 Function.html = function () {}
-Function.html.output = function (body) {
+Function.html.output = function (body, variable) {
+	variable = variable || {}
 	var html = [`<!DOCTYPE html>`];
 	html.push (`<html lang="en" translate="no" class="notranslate" prefix="og: http://ogp.me/ns#">`);
-	html.push (("\t") + `<head profile="#">`);
-	html.pushed (2, `<title></title>`);
+	html.pushed (1, `<head profile="#">`);
+	html.pushed (2, `<title>{{ title }}</title>`);
 	html.pushed (2, `<meta http-equiv="X-UA-Compatible" content="IE=edge">`);
 	html.pushed (2, `<meta http-equiv="X-Cross-Origin" content="*">`);
 	html.pushed (2, `<meta charset="UTF-8">`);
 	html.pushed (2, `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1">`);
 	html.pushed (2, `<meta name="author" content="">`);
 	html.pushed (2, `<meta name="generator" content="">`);
-	html.pushed (2, `<meta name="keywords" content="">`);
+	html.pushed (2, `<meta name="keywords" content="{{ keyword }}">`);
 	html.pushed (2, `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">`);
 	html.pushed (2, `<meta name="description" content="">`);
 	html.pushed (2, `<meta name="google" content="notranslate">`);
@@ -155,13 +156,23 @@ Function.html.output = function (body) {
 		html.pushed (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
 		html.pushed (2, `<script src="/prototype.js"></script>`);
 		}
-	html.push (("\t") + `</head>`);
-	html.push (("\t") + `<body>`);
+	html.pushed (2, `<script type="application/ld+json"></script>`);
+	html.pushed (2, `<script type="application/ld+json"></script>`);
+	html.pushed (2, `<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>`);
+	html.pushed (1, `</head>`);
+	html.pushed (1, `<body>`);
 	html.push (body);
-	html.push (("\t") + `</body>`);
+	html.pushed (1, `</body>`);
 	html.push (`</html>`);
-	return html.join ("\n");
+	return html.join ("\n").
+	split ("{{ title }}").join (variable.title || Function.html.output.__value.title || "UnTitled").
+	split ("{{ keyword }}").join ((variable.keyword || Function.html.output.__value.keyword || []).join (", "))
+	;
 	}
+Function.html.output.set = function (key, value) {
+	Function.html.output.__value [key] = value;
+	}
+Function.html.output.__value = {}
 
 Function.JQuery = function () {
 	$.body = function () {}
