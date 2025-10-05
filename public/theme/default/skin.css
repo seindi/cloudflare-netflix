@@ -1,0 +1,151 @@
+/**
+ * xxx
+ *
+ * title
+ * description
+ * sub description
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
+
+:root
+{
+--font-family: "Roboto", sans-serif;
+--font-family-title: "Roboto", "Segoe UI", sans-serif;
+--font-family-description: "Roboto", "Segoe UI", sans-serif;
+--font-family-article: "Alegreya", "Roboto", "Segoe UI", sans-serif;
+--font-family-quote: "Roboto", "Segoe UI", sans-serif;
+--font-family-code: "Courier New", "Roboto", "Segoe UI", sans-serif;
+--font-family-print: "Roboto", "Segoe UI", sans-serif;
+--font-family-error: "Roboto", "Segoe UI", sans-serif;
+--font-family-warning: "Roboto", "Segoe UI", sans-serif;
+--font-family-notice: "Roboto", "Segoe UI", sans-serif;
+}
+
+:root
+{
+--font-size: 14px;
+--font-tiny: 8px;
+--font-small: 10px;
+--font-medium: 18px;
+--font-medium-large: 20px;
+--font-large: 24px;
+--font-big: 32px;
+}
+
+:root
+{
+--header-size: 65px;
+--nav-size: 200px;
+--navigation-size: 200px;
+--menu-size: 250px;
+--side-size: 200px;
+--form-search-size: 50px;
+--padding-horizontal: 0px 10px;
+}
+
+/**
+ * xxx
+ *
+ * title
+ * description
+ * sub description
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
+
+:root
+{
+--color: 51, 51, 51; /* #333333 */
+--mono: 241, 241, 241; /* #F1F1F1 */
+--mono-pop: 250, 250, 250; /* #FAFAFA */
+--mono-extra: 254, 254, 254; /* #FEFEFE */
+--black: 17, 17, 17; /* #111111 */
+--white: 255, 255, 255;
+--gray: 128, 128, 128;
+--gray-pop: 102, 102, 102; /* #666666 */
+--gray-soft: 253, 253, 254;
+--gray-hard: 212, 213, 216;
+--red: 255, 0, 0; --red-pop: 224, 108, 117;
+--green: 0, 128, 0; --green-pop: 152, 195, 121; --green-soft: 230, 246, 230; --green-hard: 0, 148, 0;
+--blue: 0, 0, 255; --blue-pop: 97, 174, 239; --blue-soft: 238, 249, 253; --blue-hard: 76, 179, 212; --blue-ray: 66, 133, 244;
+--yellow: 255, 255, 0; --yellow-pop: 229, 192, 123; --yellow-soft: 255, 248, 230; --yellow-hard: 230, 167, 0;
+--orange: 255, 165, 0; --orange-pop: 210, 132, 69;
+--purple: 128, 0, 128; --purple-pop: 198, 120, 221;
+--pink: 255, 192, 203; --pink-pop: 255, 192, 203;
+--cyan: 0, 255, 255; --cyan-pop: 117, 181, 170;
+}
+
+/**
+ * xxx
+ *
+ * title
+ * description
+ * sub description
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
+
+:root
+{
+--background-color: rgb(var(--white));
+--font-color: #333333;
+--font-anchor-color: rgb(var(--blue-ray));
+--font-anchor-color-focus: rgb(var(--blue-ray));
+--font-anchor-color-active: rgb(var(--blue-ray));
+--font-anchor-color-visited: rgb(var(--blue-ray));
+--font-anchor-color-hover: rgb(var(--blue-ray));
+--border-color: 204, 204, 204; /* #CCCCCC */
+--box-shadow: 60, 64, 67;
+--box-shadow-pop: 11, 20, 26;
+--header-color: rgb(var(--white));
+}
+
+/**
+ * xxx
+ *
+ * title
+ * description
+ * sub description
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
+
+[theme="night"]
+{
+--mono: 34, 34, 34;
+--mono-pop: 51, 51, 51;
+--background-color: #121212;
+--border-color: 51, 51, 51;
+--header-color: #101010;
+--font-color: #cccccc;
+--box-shadow: 34, 34, 34;
+}
+
+/**
+ * xxx
+ *
+ * title
+ * description
+ * sub description
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
+
+[class*="margin:string"] {}
+[class*="margin:icon"] { margin-top: 5px; }
+[class*="margin-small:icon"] { margin-top: 2px; }
+
+[pixel] {}
+[pixel-view] {}
+[string] {}
+[number] {}
+[icon] {}
+[emoticon] {}
+[clear] {}
+
+/**
+ * the end
+ *
+ * xxx://xxx.xxx.xxx/xxx/xxx
+ */
