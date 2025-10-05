@@ -1,4 +1,4 @@
-import php, {express} from "../zend/engine";
+import php from "../zend/engine";
 
 php.is_array = function (input) { return Array.isArray (input); }
 
@@ -16,7 +16,7 @@ php.parse_url = function (input: string) {
 		}
 	}
 
-php.is_agent_crawler = function (agent) {
+php.is_agent_crawler = function (agent: string) {
 	var pattern = [
 		/Googlebot/i,
 		/Bingbot/i,

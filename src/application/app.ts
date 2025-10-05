@@ -43,6 +43,7 @@ import "../plugin/TMDB"
 function library (request: any, response: any, next: any) {
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true
 	request.organic = function () { return ! request.visitor ["agent:crawler"] }
+	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"])
 	}
 
 /**
