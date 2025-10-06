@@ -4,6 +4,8 @@ function plugin () {}
 var php : any = {
 	express: new Hono <{Bindings: {asset: Fetcher, db: D1Database, cache: KVNamespace}}> (),
 	plugin,
+	object: Object,
+	function: Function,
 	is_boolean: Object.is_boolean,
 	is_object: Object.is_object,
 	is_array: Object.is_array,
