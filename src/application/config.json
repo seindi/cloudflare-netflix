@@ -1,0 +1,4 @@
+{
+"theme": {"id": "default", "name": "Default", "version": "0.0.0"},
+"*": "*"
+}

@@ -30,4 +30,5 @@ var php : any = {
 	html: Function.html,
 	}
 export type {Hono as express}
+export var html : any = function () {}
 export default php;

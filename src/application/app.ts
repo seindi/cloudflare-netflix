@@ -19,16 +19,20 @@
  */
 
 import php from "../zend/engine"
+import config from "../application/config.json"
 import "../zend/lib"
 // import "../zend/library"
-// import "../zend/constant"
+import "../zend/constant"
 // import "../zend/db"
-// import "../zend/theme"
+import "../zend/theme"
 // import "../zend/template"
 // import "../zend/express"
 import "../zend/worker"
 
 import "../plugin/TMDB"
+
+var {ln, ln_r} = php.constant
+var {lib} = php
 
 /**
  * xxx
@@ -40,13 +44,28 @@ import "../plugin/TMDB"
  * xxx://xxx.xxx.xxx/xxx
  */
 
-var library : any = function (request: any, response: any, next: any) {
+var library : any = async function (request: any, response: any, next: any) {
 	request.base_url = request.url.address
 	request.canonical_url = request.url.canonical
+	request.output = {base_url: request.base_url, canonical_url: request.canonical_url}
+	request.output.asset_url = request.base_url.trim ()
+	request.output.base_theme_uri = php.worker.route ["$"].base_theme_uri
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true
 	request.organic = function () { return ! request.visitor ["agent:crawler"] }
 	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"], request)
 	php.function.html.output.set ()
+	return php.promise (function (resolve: any, reject: any) {
+		lib.timeout (function () {
+			request.config = config
+			request.theme = new php.theme (request.config.theme)
+			request.output ["og:site-name"] = ""
+			request.output ["og:title"] = "UnTitled"
+			request.output ["og:description"] = ""
+			request.output ["og:url"] = request.canonical_url
+			request.output ["og:type"] = "website"
+			resolve ()
+			})
+		});
 	}
 
 library.route = function () {}
@@ -63,7 +82,7 @@ library.route = function () {}
 
 var app = new php.worker (php.express)
 app.start (async function (request: any, response: any, next: any) {
-	library (request, response, next)
+	await library (request, response, next)
 	return next ()
 	})
 
@@ -88,19 +107,26 @@ app.start (async function (request: any, response: any, next: any) {
  */
 
 app.get ("/", async function (request: any, response: any, next: any) {
+	request.output ["page:is"] = "index"
+	var layout = request.theme.layout ("index").set ({}, 6)
+	var body = request.theme.layout ("base").set ({body: layout}, 2)
+	return response.output (body)
+	/*
 	var html = []
 	if (request.organic ()) {
 		var data = await request.TMDB.movie.popular ({page: 1})
-		html.push ('<div style="display: flex">');
+		var video_card_single = []
 		for (var i in data.list) {
-			html.push (`<div>
-			<div>Title : ${data.list [i].title}</div>
-			<div><img height="150" src="${data.list [i].poster}"></div>
-			</div>`);
+			video_card_single.push (request.theme.component ("video-card").set ({poster: data.list [i].poster}))
 			}
-		html.push ("</div>")
+		var video_card = request.theme.component ("video-card:container").set ({body: video_card_single})
+		html.push (video_card)
 		}
-	return response (php.html ["output"] (html.join ("")))
+	request.render.title = "asd"
+	var layout = request.theme.layout ("index").set ({}, 6)
+	var body = request.theme.layout ("base").set ({body: layout}, 2)
+	return response.render (body)
+	*/
 	})
 
 /**
@@ -135,19 +161,19 @@ app.get (php.worker.route.page ["privacy-policy:content"], function (request: an
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get (php.worker.route.archive.index, function (request: any, response: any, next: any) {
+app.get (php.worker.route.archive, function (request: any, response: any, next: any) {
 	return response ("archive index")
 	})
 
-app.get (php.worker.route.archive.year, function (request: any, response: any, next: any) {
+app.get (php.worker.route ["archive:year"], function (request: any, response: any, next: any) {
 	return response ("archive year")
 	})
 
-app.get (php.worker.route.archive.month, function (request: any, response: any, next: any) {
+app.get (php.worker.route ["archive:month"], function (request: any, response: any, next: any) {
 	return response ("archive month")
 	})
 
-app.get (php.worker.route.archive.day, function (request: any, response: any, next: any) {
+app.get (php.worker.route ["archive:day"], function (request: any, response: any, next: any) {
 	return response ("archive day")
 	})
 
@@ -177,8 +203,65 @@ library.route.popular = async function popular_list (request: any, response: any
 	return response (php.html ["output"] (html.join ("")))
 	}
 
-app.get (php.worker.route ["__"].popular, library.route.popular)
-app.get (php.worker.route ["__"]["popular:list"], library.route.popular)
+app.get (php.worker.route.movie, async function (request: any, response: any, next: any) {
+	return response ("movie index")
+	})
+
+app.get (php.worker.route ["movie:watch"], async function (request: any, response: any, next: any) {
+	return response ("movie watch")
+	})
+
+app.get (php.worker.route ["movie:discover"], async function (request: any, response: any, next: any) {
+	return response ("movie discover")
+	})
+
+app.get (php.worker.route ["movie:trending"], async function (request: any, response: any, next: any) {
+	var html = []
+	if (request.organic ()) {
+		var data = await request.TMDB.movie.trending ({page: request.url.query.get ("page")})
+		html.push ('<div style="display: flex">');
+		for (var i in data.list) {
+			html.push (`<div>
+			<div>Title : ${data.list [i].title}</div>
+			<div><img height="150" src="${data.list [i].poster}"></div>
+			</div>`);
+			}
+		html.push ("</div>")
+		}
+	return response (php.html ["output"] (html.join ("")))
+	})
+
+app.get (php.worker.route ["movie:popular"], async function (request: any, response: any, next: any) {
+	var html = []
+	if (request.organic ()) {
+		var data = await request.TMDB.movie.popular ({page: request.url.query.get ("page")})
+		html.push ('<div style="display: flex">');
+		for (var i in data.list) {
+			html.push (`<div>
+			<div>Title : ${data.list [i].title}</div>
+			<div><img height="150" src="${data.list [i].poster}"></div>
+			</div>`);
+			}
+		html.push ("</div>")
+		}
+	return response (php.html ["output"] (html.join ("")))
+	})
+
+app.get (php.worker.route ["movie:now_playing"], async function (request: any, response: any, next: any) {
+	return response ("movie now_playing")
+	})
+
+app.get (php.worker.route ["movie:top_rated"], async function (request: any, response: any, next: any) {
+	return response ("movie top_rated")
+	})
+
+app.get (php.worker.route ["movie:up_coming"], async function (request: any, response: any, next: any) {
+	return response ("movie up_coming")
+	})
+
+app.get (php.worker.route ["movie:single"], async function (request: any, response: any, next: any) {
+	return response ("movie single")
+	})
 
 /**
  * xxx

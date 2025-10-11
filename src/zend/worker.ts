@@ -56,12 +56,14 @@ php.worker = class {
 	}
 
 php.worker.io = function (io: any) {
-	return {request: php.worker.io.request (io), response: php.worker.io.response (io)}
+	var request = php.worker.io.request (io);
+	return {request, response: php.worker.io.response (io, request)}
 	}
 
 php.worker.io.request = function (io: any) {
 	var request : any = function () {}
 	request.var = io.env;
+	request.render = {}
 	request.header = {}
 	for (var header of io.req.raw.headers.entries ()) request.header [header [0]] = header [1];
 	request.url = php.parse_url (io.req.raw.url);
@@ -70,11 +72,13 @@ php.worker.io.request = function (io: any) {
 	return request;
 	}
 
-php.worker.io.response = function (io: any) {
+php.worker.io.response = function (io: any, request: any) {
 	var response : any = function (value: string, code: number = 200) { return io.html (value, code); }
 	response.text = io.text;
 	response.html = io.html;
 	response.json = io.json;
+	response.output = function (output: string) { return response (php.render (php.output (output), request.output)); }
+	// response.render = function (value: string = "") { return response (php.html ["output"] (value, request.render)); }
 	return response;
 	}
 
