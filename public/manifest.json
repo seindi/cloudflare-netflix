@@ -1,0 +1,12 @@
+{
+"name": "Minimal Manifest",
+"short_name": "Minimal Manifest",
+"display": "minimal-ui",
+"start_url": "/?ex",
+"scope": "/",
+"background_color": "#FFFFFF",
+"theme_color": "#FF0033",
+"icons": [
+	{"src": "/static/cfw-144.png", "sizes": "144x144", "type": "image/png"}
+	]
+}

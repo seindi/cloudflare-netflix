@@ -144,6 +144,7 @@ php.output = function (output: string) {
 			}
 		markup.push (2, `<link rel="stylesheet" href="${php.base_uri ('{{ route style.css }}')}">`);
 		markup.push (2, `<link rel="stylesheet" href="${php.theme_uri ('style.css')}">`);
+		markup.push (2, `<link rel="stylesheet" href="${php.theme_uri ('style-sheet.css')}">`);
 		if (__config ["deployment:live"]) {
 			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>`);
 			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>`);

@@ -48,8 +48,6 @@ var library : any = async function (request: any, response: any, next: any) {
 	request.base_url = request.url.address
 	request.canonical_url = request.url.canonical
 	request.output = {base_url: request.base_url, canonical_url: request.canonical_url}
-	request.output.asset_url = request.base_url.trim ()
-	request.output.theme_url = request.base_url + php.worker.route ["$"].theme_uri
 	for (var i in php.worker.route) {
 		if (i === "$") continue
 		else if (typeof php.worker.route [i] === "string") request.output [["route", i].join (" ")] = php.worker.route [i]
@@ -62,6 +60,8 @@ var library : any = async function (request: any, response: any, next: any) {
 		lib.timeout (function () {
 			request.config = config
 			request.theme = new php.theme (request.config.theme)
+			request.output.asset_url = request.base_url.trim ()
+			request.output.theme_url = request.base_url + php.worker.route ["$"].theme_uri
 			request.output.theme_id = request.config.theme.id
 			request.output.theme_name = request.config.theme.name
 			request.output.theme_version = request.config.theme.version
@@ -115,7 +115,7 @@ app.start (async function (request: any, response: any, next: any) {
 
 app.get ("/", async function (request: any, response: any, next: any) {
 	request.output ["page:is"] = "index"
-	var layout = request.theme.layout ("index").set ({}, 6)
+	var layout = request.theme.layout ("index").set ({}, 5)
 	var body = request.theme.layout ("base").set ({body: layout}, 2)
 	return response.output (body)
 	/*
