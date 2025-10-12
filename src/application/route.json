@@ -1,6 +1,7 @@
 {
-"$": {"base_theme_uri": "/theme"},
+"$": {"theme_uri": "/theme"},
 "index": "/",
+"style.css": "/style.css",
 "robot:text": "/robots.txt",
 "ad:text": "/ads.txt",
 "favorite.ico": "/favicon.ico",

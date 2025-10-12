@@ -1,4 +1,5 @@
 import php from "../zend/engine";
+import __config from "../application/config.json";
 
 php.lib = function () {}
 
@@ -97,6 +98,7 @@ php.output = function (output: string) {
 	markup.push (2, `<meta name="keywords" content="{{ keyword }}">`);
 	markup.push (2, `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">`);
 	markup.push (2, `<meta name="description" content="">`);
+	markup.push (2, `<meta name="rating" content="general">`);
 	markup.push (2, `<meta name="google" content="notranslate">`);
 	markup.push (2, `<meta name="googlebot" content="notranslate">`);
 	markup.push (2, `<meta name="googlebot-news" content="index, follow">`);
@@ -129,24 +131,28 @@ php.output = function (output: string) {
 	markup.push (2, `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`);
 	markup.push (2, `<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>`);
 	if (true) {
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Moirai+One&display=swap">`);
-		markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap">`);
-		markup.push (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">`);
-		markup.push (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">`);
-		markup.push (2, `<link rel="stylesheet" href="{{ asset_url }}{{ base_theme_uri }}/style.css">`);
-		markup.push (2, `<link rel="stylesheet" href="{{ asset_url }}{{ base_theme_uri }}/default/style.css">`);
-		markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>`);
-		markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>`);
-		markup.push (2, `<script src="https://unpkg.com/lodash@4.17.21/core.min.js"></script>`);
-		markup.push (2, `<script src="https://unpkg.com/vue@3.5.22/dist/vue.global.prod.js"></script>`);
-		markup.push (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
-		markup.push (2, `<script src="{{ asset_url }}/prototype.js"></script>`);
-		markup.push (2, `<script src="{{ asset_url }}{{ base_theme_uri }}/script.js"></script>`);
+		if (__config ["deployment:live"]) {
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Moirai+One&display=swap">`);
+			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap">`);
+			markup.push (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">`);
+			markup.push (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">`);
+			}
+		markup.push (2, `<link rel="stylesheet" href="${php.base_uri ('{{ route style.css }}')}">`);
+		markup.push (2, `<link rel="stylesheet" href="${php.theme_uri ('style.css')}">`);
+		if (__config ["deployment:live"]) {
+			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>`);
+			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>`);
+			markup.push (2, `<script src="https://unpkg.com/lodash@4.17.21/core.min.js"></script>`);
+			markup.push (2, `<script src="https://unpkg.com/vue@3.5.22/dist/vue.global.prod.js"></script>`);
+			markup.push (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
+			}
+		markup.push (2, `<script src="${php.asset_uri ('/prototype.js')}"></script>`);
+		markup.push (2, `<script src="${php.theme_uri ('script.js')}"></script>`);
 		}
 	markup.push (2, `<script type="application/ld+json"></script>`);
 	markup.push (2, `<script type="application/ld+json"></script>`);
@@ -159,3 +165,7 @@ php.output = function (output: string) {
 	markup.push (0, `</html>`);
 	return markup.data.join ("\n");
 	}
+
+php.base_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ base_url }}" + path; }
+php.asset_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ asset_url }}" + path; }
+php.theme_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ theme_url }}/{{ theme_id }}/" + path; }

@@ -1,3 +1,6 @@
+import php from "../../zend/engine";
+import config from "../../application/config.json"
+
 var theme = {
 	layout: {
 		"base": [
@@ -10,7 +13,7 @@ var theme = {
 			`		</div>`,
 			`	</div>`,
 			`</div>`,
-			`<script src="{{ base_url }}{{ base_theme_uri }}/scripted.js"></script>`,
+			`<script src="${php.theme_uri ('scripted.js')}"></script>`,
 			],
 		"index": [
 			`<header>header</header>`,

@@ -49,7 +49,11 @@ var library : any = async function (request: any, response: any, next: any) {
 	request.canonical_url = request.url.canonical
 	request.output = {base_url: request.base_url, canonical_url: request.canonical_url}
 	request.output.asset_url = request.base_url.trim ()
-	request.output.base_theme_uri = php.worker.route ["$"].base_theme_uri
+	request.output.theme_url = request.base_url + php.worker.route ["$"].theme_uri
+	for (var i in php.worker.route) {
+		if (i === "$") continue
+		else if (typeof php.worker.route [i] === "string") request.output [["route", i].join (" ")] = php.worker.route [i]
+		}
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true
 	request.organic = function () { return ! request.visitor ["agent:crawler"] }
 	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"], request)
@@ -58,6 +62,9 @@ var library : any = async function (request: any, response: any, next: any) {
 		lib.timeout (function () {
 			request.config = config
 			request.theme = new php.theme (request.config.theme)
+			request.output.theme_id = request.config.theme.id
+			request.output.theme_name = request.config.theme.name
+			request.output.theme_version = request.config.theme.version
 			request.output ["og:site-name"] = ""
 			request.output ["og:title"] = "UnTitled"
 			request.output ["og:description"] = ""
