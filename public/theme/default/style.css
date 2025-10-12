@@ -86,7 +86,7 @@ body > #wrap > #wrapper > #container { display: table-cell; width: 100%; height:
 
 #body {}
 
-#app > header { height: 50px; }
+#app > header { height: 65px; }
 #app > #body > menu { min-width: 250px; }
 
 /**

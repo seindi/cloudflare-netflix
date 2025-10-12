@@ -19,7 +19,7 @@
  */
 
 import php from "../zend/engine"
-import config from "../application/config.json"
+import __config from "../application/config.json"
 import "../zend/lib"
 // import "../zend/library"
 import "../zend/constant"
@@ -44,7 +44,32 @@ var {lib} = php
  * xxx://xxx.xxx.xxx/xxx
  */
 
-var library : any = async function (request: any, response: any, next: any) {
+var library : any = class {
+	request: any
+	response: any
+	next: any
+	constructor (request: any, response: any, next: any) {
+		this.request = request
+		this.response = response
+		this.next = next
+		}
+	async output () {
+		this.request.output.asset_url = this.request.base_url.trim ()
+		this.request.output.theme_url = this.request.base_url + php.worker.route ["$"].theme_uri
+		this.request.output.theme_id = this.request.config.theme.id
+		this.request.output.theme_name = this.request.config.theme.name
+		this.request.output.theme_version = this.request.config.theme.version
+		}
+	async seo () {
+		this.request.output ["og:site-name"] = ""
+		this.request.output ["og:title"] = "UnTitled"
+		this.request.output ["og:description"] = ""
+		this.request.output ["og:url"] = this.request.canonical_url
+		this.request.output ["og:type"] = "website"
+		}
+	}
+
+library.start = async function (request: any, response: any, next: any) {
 	request.base_url = request.url.address
 	request.canonical_url = request.url.canonical
 	request.output = {base_url: request.base_url, canonical_url: request.canonical_url}
@@ -55,21 +80,18 @@ var library : any = async function (request: any, response: any, next: any) {
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true
 	request.organic = function () { return ! request.visitor ["agent:crawler"] }
 	request.TMDB = new php.plugin.TMDB (request.var ["TMDB:api"], request)
-	php.function.html.output.set ()
+	request.library = new library (request, response, next)
 	return php.promise (function (resolve: any, reject: any) {
-		lib.timeout (function () {
-			request.config = config
+		var then : any = function () {
+			then.queue.push (true)
+			if (then.queue.length > 1) resolve ()
+			}
+		then.queue = []
+		lib.timeout (async function () {
+			request.config = (__config)
 			request.theme = new php.theme (request.config.theme)
-			request.output.asset_url = request.base_url.trim ()
-			request.output.theme_url = request.base_url + php.worker.route ["$"].theme_uri
-			request.output.theme_id = request.config.theme.id
-			request.output.theme_name = request.config.theme.name
-			request.output.theme_version = request.config.theme.version
-			request.output ["og:site-name"] = ""
-			request.output ["og:title"] = "UnTitled"
-			request.output ["og:description"] = ""
-			request.output ["og:url"] = request.canonical_url
-			request.output ["og:type"] = "website"
+			request.library.output ()
+			request.library.seo ()
 			resolve ()
 			})
 		});
@@ -89,7 +111,7 @@ library.route = function () {}
 
 var app = new php.worker (php.express)
 app.start (async function (request: any, response: any, next: any) {
-	await library (request, response, next)
+	await library.start (request, response, next)
 	return next ()
 	})
 

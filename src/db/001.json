@@ -1,0 +1,21 @@
+{
+"theme_layout": [
+	{"location": "menu:list", "component": "menu:anchor", "data": {
+		"list": [
+			{"title": "Home", "icon": "home"},
+			{"title": "Trending", "icon": "home"},
+			{"title": "Editor Choice", "icon": "home"},
+			{"title": "Live", "icon": "home"}
+			]
+		}},
+	{"location": "menu:list", "component": "menu:anchor", "data": {
+		"heading": {"title": "YOU"},
+		"list": [
+			{"title": "History", "icon": "home"},
+			{"title": "Watch Later", "icon": "home"},
+			{"title": "Playlist", "icon": "home"}
+			]
+		}}
+	],
+"*": "*"
+}
