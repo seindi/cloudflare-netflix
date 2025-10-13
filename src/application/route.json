@@ -1,5 +1,5 @@
 {
-"$": {"theme_uri": "/theme"},
+"$": {"asset_uri": "/asset", "static_uri": "/static", "theme_uri": "/theme"},
 "index": "/",
 "style.css": "/style.css",
 "robot:text": "/robots.txt",

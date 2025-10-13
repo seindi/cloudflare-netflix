@@ -1,92 +1,67 @@
 import php from "../zend/engine";
-
-import theme_default from "../theme/default";
-
-var THEME : any = {
-	"default": theme_default,
-	}
+import __config from "../config.json";
+import __theme from "../db/theme.json";
 
 php.theme = class {
 	id: string;
-	name: string;
 	version: string;
-	constructor (theme: any) {
+	prefix: string;
+	layout: any = {}
+	component: any = {}
+	constructor (theme: any, prefix: string) {
 		this.id = theme.id;
-		this.name = theme.name;
 		this.version = theme.version;
+		this.prefix = prefix;
 		}
-	layout (id: any) { return new php.theme.layout (this, id); }
-	component (id: any) { return new php.theme.component (this, id); }
-	}
-
-php.theme.layout = class {
-	theme: any;
-	id: string;
-	constructor (theme: any, id: string) {
-		this.theme = theme;
-		this.id = id;
+	async fetch () {
+		var theme : any = await this.__fetch ();
+		for (var i in theme.layout) this.layout [i] = theme.layout [i].ln;
+		for (var i in theme.component) this.component [i] = theme.component [i].ln;
+		return new Promise (function (resolve, reject) { resolve (true); });
 		}
-	set (variable: any = {}, tab_s: number = 0) {
-		var markup = THEME [this.theme.id].layout [this.id];
-		if (markup) return php.render (markup, variable, tab_s);
-		else return "";
-		}
-	}
-
-php.theme.component = class {
-	theme: any;
-	id: string;
-	constructor (theme: any, id: string) {
-		this.theme = theme;
-		this.id = id;
-		}
-	set (variable: any = {}, tab_s: number = 0) {
-		var markup = THEME [this.theme.id].component [this.id];
-		if (markup) return php.render (markup, variable, tab_s);
-		else return "";
-		}
-	}
-
-php.theme.variable = function (variable: string) {
-	return "{{ " + variable + " }}"
-	}
-
-/*
-import php from "../zend/engine";
-
-import theme_default_layout from "../theme/default/layout";
-import theme_default_component_video_card from "../theme/default/component/video-card";
-
-var THEME : any = {
-	"default layout": theme_default_layout,
-	"default component video-card": theme_default_component_video_card,
-	}
-
-function get_theme_layout (theme: string, layout: string) {
-	if (layout) return THEME [theme + " layout " + layout];
-	else return THEME [theme + " layout"];
-	}
-
-function get_theme_component (theme: string, component: string) {
-	return THEME [theme + " component " + component];
-	}
-
-php.theme = class {
-	id: string;
-	name: string;
-	version: string;
-	constructor (theme: any) {
-		this.id = theme.id;
-		this.name = theme.name;
-		this.version = theme.version;
-		}
-	layout (layout: string) {
-		return get_theme_layout (this.id, layout);
-		}
-	component (component: string) {
-		return get_theme_component (this.id, component);
+	__fetch () {
+		var prefix = this.prefix;
+		var theme_id = this.id;
+		var theme_version = this.version;
+		return new Promise (async function (resolve, reject) {
+			var id : string = "";
+			var layout : any = await fetch ([prefix, theme_id, theme_version, "layout"].join ("/"));
+			layout = await layout.text ();
+			layout = layout.split ("\n");
+			var __layout : any = {}
+			for (var i in layout) {
+				if (layout [i].startsWith (`<template id`)) {
+					id = str_before (`"`, str_after (`<template id="`, layout [i]))
+					__layout [id] = {ln: []}
+					continue;
+					}
+				else if (layout [i] === `</template>`) continue;
+				else if (__layout [id]) __layout [id].ln.push (layout [i]);
+				}
+			var component : any = await fetch ([prefix, theme_id, theme_version, "component"].join ("/"));
+			component = await component.text ();
+			component = component.split ("\n");
+			var __component : any = {}
+			for (var i in component) {
+				if (component [i].startsWith (`<template id`)) {
+					id = str_before (`"`, str_after (`<template id="`, component [i]))
+					__component [id] = {ln: []}
+					continue;
+					}
+				else if (component [i] === `</template>`) continue;
+				else if (__component [id]) __component [id].ln.push (component [i]);
+				}
+			resolve ({layout: __layout, component: __component});
+			});
 		}
 	}
 
+function str_after (search: string, input: string) {
+	var pos = input.indexOf (search);
+	if (pos !== undefined) return input.substr (pos + search.length);
+	else return "";
+	}
 
-*/
+function str_before (search: string, input: string) {
+	return input.split (search) [0];
+	}

@@ -1,5 +1,9 @@
 import php, {express} from "../zend/engine";
-import __route from "../application/route.json";
+import __config from "../config.json";
+import __theme from "../db/theme.json";
+import __app from "../application/app.json";
+import $__route from "../application/route.json";
+const __route : any = $__route;
 
 php.worker = class {
 	app: express;
@@ -63,12 +67,27 @@ php.worker.io = function (io: any) {
 php.worker.io.request = function (io: any) {
 	var request : any = function () {}
 	request.var = io.env;
+	request.error = {}
 	request.render = {}
 	request.header = {}
 	for (var header of io.req.raw.headers.entries ()) request.header [header [0]] = header [1];
 	request.url = php.parse_url (io.req.raw.url);
 	request.url.param = function (key: string) { return io.req.param (key); }
+	request.app = {host: request.url.host.name}
+	request.base_url = request.url.address
+	request.canonical_url = request.url.canonical
 	request.visitor = {agent: request.header ["user-agent"], "agent:crawler": false, country: {code: io.req.raw.cf.country, region: {code: io.req.raw.cf.regionCode, name: io.req.raw.cf.region, city: {name: io.req.raw.cf.city, postal: {code: io.req.raw.cf.postalCode}}}}, latitude: io.req.raw.cf.latitude, longitude: io.req.raw.cf.longitude, internet: {organization: io.req.raw.cf.asOrganization}, timezone: io.req.raw.cf.timezone}
+	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true;
+	request.organic = function () { return ! request.visitor ["agent:crawler"]; }
+	request.output = {route: [], base_url: request.base_url, canonical_url: request.canonical_url, theme_id: "default", theme_version: "0.0.0", theme_version_check: "0.0.0"}
+	for (var i in __route) {
+		if (i === "$") continue;
+		else if (typeof __route [i] === "string") {
+			request.output.route.push (`"${i}": "${__route [i]}"`)
+			request.output [["route", i].join (" ")] = __route [i];
+			}
+		}
+	request.output.route = request.output.route.join (", ");
 	return request;
 	}
 
@@ -78,8 +97,5 @@ php.worker.io.response = function (io: any, request: any) {
 	response.html = io.html;
 	response.json = io.json;
 	response.output = function (output: string) { return response (php.render (php.output (output), request.output)); }
-	// response.render = function (value: string = "") { return response (php.html ["output"] (value, request.render)); }
 	return response;
 	}
-
-php.worker.route = (__route);

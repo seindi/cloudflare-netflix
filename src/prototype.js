@@ -54,6 +54,8 @@ Define (Object, "clone", function (object) { return JSON.parse (JSON.stringify (
 
 Array.define = function (key, value, option) { Object.defineProperty (Array.prototype, key, {value, ... option}); }
 Array.define ("clone", function () { return Object.clone (this); });
+Array.define ("first", function (value) { for (var i in this) return this [i]; return value; });
+Array.define ("last", function (value) { for (var i in this) value = this [i]; return value; });
 Array.define ("flip", function () { var array = this.clone (); array.reverse (); return array; });
 Array.define ("chunk", function (chunk) { return _.chunk (this, chunk); });
 Array.define ("insert", function () { return this; });
@@ -90,90 +92,6 @@ URL.parse_url = function (input) {
 		parse: url,
 		}
 	}
-
-Function.html = function () {}
-Function.html.output = function (body, variable) {
-	variable = variable || {}
-	var html = [`<!DOCTYPE html>`];
-	html.push (`<html lang="en" translate="no" class="notranslate" prefix="og: http://ogp.me/ns#">`);
-	html.pushed (1, `<head profile="#">`);
-	html.pushed (2, `<title>{{ title }}</title>`);
-	html.pushed (2, `<meta http-equiv="X-UA-Compatible" content="IE=edge">`);
-	html.pushed (2, `<meta http-equiv="X-Cross-Origin" content="*">`);
-	html.pushed (2, `<meta charset="UTF-8">`);
-	html.pushed (2, `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1">`);
-	html.pushed (2, `<meta name="author" content="">`);
-	html.pushed (2, `<meta name="generator" content="">`);
-	html.pushed (2, `<meta name="keywords" content="{{ keyword }}">`);
-	html.pushed (2, `<meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">`);
-	html.pushed (2, `<meta name="description" content="">`);
-	html.pushed (2, `<meta name="google" content="notranslate">`);
-	html.pushed (2, `<meta name="googlebot" content="notranslate">`);
-	html.pushed (2, `<meta name="googlebot-news" content="index, follow">`);
-	html.pushed (2, `<meta name="twitter:card" content="summary_large_image">`);
-	html.pushed (2, `<meta property="article:published_time" content="">`);
-	html.pushed (2, `<meta property="article:modified_time" content="">`);
-	html.pushed (2, `<meta property="og:site_name" content="">`);
-	html.pushed (2, `<meta property="og:title" content="">`);
-	html.pushed (2, `<meta property="og:description" content="">`);
-	html.pushed (2, `<meta property="og:url" content="">`);
-	html.pushed (2, `<meta property="og:image" content="">`);
-	html.pushed (2, `<meta property="og:type" content="website">`);
-	html.pushed (2, `<meta property="og:locale" content="en_US"></meta>`);
-	html.pushed (2, `<link rel="profile" href="https://gmpg.org/xfn/11">`);
-	html.pushed (2, `<link rel="canonical" href="">`);
-	html.pushed (2, `<link rel="manifest" href="${variable.asset_url || variable.base_url || ""}/manifest.json">`);
-	html.pushed (2, `<link rel="alternate" href="${variable.base_url || ""}/feed" type="application/rss+xml" title="&raquo; Feed">`);
-	html.pushed (2, `<link rel="alternate" href="${variable.base_url || ""}/feed/atom" type="application/atom+xml" title="&raquo; Feed (Atom)">`);
-	html.pushed (2, `<link rel="search" href="${variable.base_url || ""}/opensearch.xml" type="application/opensearchdescription+xml" title="">`);
-	html.pushed (2, `<link rel="search" href="${variable.base_url || ""}/osd.xml" type="application/opensearchdescription+xml" title="">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://1.bp.blogspot.com">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://2.bp.blogspot.com">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://3.bp.blogspot.com">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://4.bp.blogspot.com">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://www.google-analytics.com">`);
-	html.pushed (2, `<link rel="dns-prefetch" href="https://www.googletagmanager.com">`);
-	html.pushed (2, `<link rel="preconnect" href="https://www.blogger.com" crossorigin="anonymous">`);
-	html.pushed (2, `<link rel="preconnect" href="https://blogger.googleusercontent.com" crossorigin>`);
-	html.pushed (2, `<link rel="preconnect" href="https://resources.blogblog.com" crossorigin>`);
-	html.pushed (2, `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`);
-	html.pushed (2, `<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>`);
-	if (true) {
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Puddles&display=swap">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Moirai+One&display=swap">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">`);
-		html.pushed (2, `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">`);
-		html.pushed (2, `<link rel="stylesheet" href="${variable.asset_url || variable.base_url || ""}/style.css">`);
-		html.pushed (2, `<link rel="stylesheet" href="${variable.asset_url || variable.base_url || ""}/theme/default/style.css">`);
-		html.pushed (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>`);
-		html.pushed (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>`);
-		html.pushed (2, `<script src="https://unpkg.com/lodash@4.17.21/core.min.js"></script>`);
-		html.pushed (2, `<script src="https://unpkg.com/vue@3.5.22/dist/vue.global.prod.js"></script>`);
-		html.pushed (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
-		html.pushed (2, `<script src="${variable.asset_url || variable.base_url || ""}/prototype.js"></script>`);
-		}
-	html.pushed (2, `<script type="application/ld+json"></script>`);
-	html.pushed (2, `<script type="application/ld+json"></script>`);
-	html.pushed (2, `<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>`);
-	html.pushed (1, `</head>`);
-	html.pushed (1, `<body>`);
-	html.push (body);
-	html.pushed (1, `</body>`);
-	html.push (`</html>`);
-	return html.join ("\n").
-	split ("{{ title }}").join (variable.title || Function.html.output.__value.title || "UnTitled").
-	split ("{{ keyword }}").join ((variable.keyword || Function.html.output.__value.keyword || []).join (", "))
-	;
-	}
-Function.html.output.set = function (key, value) {
-	Function.html.output.__value [key] = value;
-	}
-Function.html.output.__value = {}
 
 Function.JQuery = function () {
 	$.body = function () {}

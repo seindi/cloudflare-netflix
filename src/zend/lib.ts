@@ -1,5 +1,8 @@
 import php from "../zend/engine";
-import __config from "../application/config.json";
+import __config from "../config.json";
+import __theme from "../db/theme.json";
+import __app from "../application/app.json";
+import __route from "../application/route.json";
 
 php.lib = function () {}
 
@@ -131,7 +134,7 @@ php.output = function (output: string) {
 	markup.push (2, `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`);
 	markup.push (2, `<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>`);
 	if (true) {
-		if (__config ["deployment:live"]) {
+		if (__config ["deployment:internet"]) {
 			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
 			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
 			markup.push (2, `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">`);
@@ -145,19 +148,19 @@ php.output = function (output: string) {
 		markup.push (2, `<link rel="stylesheet" href="${php.base_uri ('{{ route style.css }}')}">`);
 		markup.push (2, `<link rel="stylesheet" href="${php.theme_uri ('style.css')}">`);
 		markup.push (2, `<link rel="stylesheet" href="${php.theme_uri ('style-sheet.css')}">`);
-		if (__config ["deployment:live"]) {
+		if (__config ["deployment:internet"]) {
 			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>`);
 			markup.push (2, `<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>`);
 			markup.push (2, `<script src="https://unpkg.com/lodash@4.17.21/core.min.js"></script>`);
 			markup.push (2, `<script src="https://unpkg.com/vue@3.5.22/dist/vue.global.prod.js"></script>`);
 			markup.push (2, `<script src="https://unpkg.com/vue-router@4.5.1/dist/vue-router.global.prod.js"></script>`);
 			}
-		markup.push (2, `<script src="${php.asset_uri ('/prototype.js')}"></script>`);
+		markup.push (2, `<script src="${php.asset_uri ('prototype.js')}"></script>`);
 		markup.push (2, `<script src="${php.theme_uri ('script.js')}"></script>`);
 		}
 	markup.push (2, `<script type="application/ld+json"></script>`);
 	markup.push (2, `<script type="application/ld+json"></script>`);
-	markup.push (2, `<script type="text/javascript">var $__ = {"page:is": "{{ page:is }}", "route": ""}</script>`);
+	markup.push (2, `<script type="text/javascript">var $__ = {"page:is": "{{ page:is }}", "route": {{{ route }}}}</script>`);
 	markup.push (2, `<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>`);
 	markup.push (1, `</head>`);
 	markup.push (1, `<body>`);
@@ -168,5 +171,6 @@ php.output = function (output: string) {
 	}
 
 php.base_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ base_url }}" + path; }
-php.asset_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ asset_url }}" + path; }
-php.theme_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ theme_url }}/{{ theme_id }}/" + path; }
+php.asset_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ asset_url }}/" + path; }
+php.static_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ static_url }}/" + path; }
+php.theme_uri = function (path: string, version: string = "{{ theme_version }}") { return "{{ theme_url }}/{{ theme_id }}/" + version + "/" + path + "?version={{ theme_version_check }}"; }

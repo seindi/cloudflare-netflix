@@ -1,0 +1,11 @@
+{
+"deployment": "local",
+"deployment:internet": true,
+"asset:url": "https://cloudflare-io.github.io",
+"static:url": "https://cloudflare-io.github.io",
+"theme:url": "https://cloudflare-io.github.io",
+"netflix:api": "",
+"IMDB:api": "",
+"TMDB:api": "9faead8ac1d342dd810e6d1a3d3795c9",
+"*": "*"
+}

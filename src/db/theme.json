@@ -1,0 +1,5 @@
+[
+{"id": "default", "name": "Default", "version": ["0.0.0"]},
+{"id": "youtube", "name": "YouTube", "version": ["0.0.0"]},
+{"id": "netflix", "name": "Netflix", "version": ["0.0.0"]}
+]

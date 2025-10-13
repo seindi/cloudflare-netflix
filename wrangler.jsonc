@@ -6,8 +6,7 @@
 "observability": {"enabled": true},
 "assets": {"binding": "asset", "directory": "./public"},
 "vars": {
-	"deployment": "local",
-	"base_url:local": "127.0.0.1:8787",
+	"base_url:local": "127.0.0.1",
 	"netflix:api": "",
 	"IMDB:api": "",
 	"TMDB:api": "9faead8ac1d342dd810e6d1a3d3795c9",
