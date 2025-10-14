@@ -19,20 +19,6 @@
  */
 
 import php, {express} from "../zend/engine"
-
-import __config from "../config.json"
-let $__config : any = __config
-
-import __theme from "../db/theme.json"
-let $__theme : any = {}
-for (var i in __theme) $__theme [__theme [i].id] = __theme [i]
-
-import __app from "../application/app.json"
-let $__app : any = __app
-
-import __route from "../application/route.json"
-let $__route : any = __route
-
 import "../zend/lib"
 // import "../zend/library"
 import "../zend/constant"
@@ -43,6 +29,19 @@ import "../zend/theme"
 import "../zend/worker"
 
 import "../plugin/TMDB"
+
+import _config from "../config.json"
+let $__config : any = _config
+
+import _theme from "../db/theme.json"
+let $__theme : any = {}
+for (var i in _theme) $__theme [_theme [i].id] = _theme [i]
+
+import _app from "../application/app.json"
+let $__app : any = _app
+
+import _route from "../application/route.json"
+let $__route : any = _route
 
 var {ln, ln_r} = php.constant
 var {lib} = php
@@ -65,13 +64,11 @@ app.start (async function (request: any, response: any, next: any) {
 	})
 
 async function libraries (request: any, response: any, next: any) {
-	//var fetcher = await fetch ("http://127.0.0.1/theme/default/layout.html")
-	//console.log (await fetcher.text ())
-	if (request.app.host in __app) {
+	if (request.app.host in $__app) {
 		request.app.theme = {id: $__app [request.app.host].theme.id}
 		if ($__app [request.app.host].theme.version) {}
 		else request.app.theme.version = $__theme [request.app.theme.id].version.last ()
-		request.TMDB = new php.plugin.TMDB (__config ["TMDB:api"], request)
+		request.TMDB = new php.plugin.TMDB ($__config ["TMDB:api"], request)
 		request.library = new library (request, response, next)
 		return php.promise (function (resolve: any, reject: any) {
 			var then : any = function () {
@@ -80,7 +77,7 @@ async function libraries (request: any, response: any, next: any) {
 				}
 			then.queue = []
 			lib.timeout (async function () {
-				request.config = (__config)
+				request.config = ($__config)
 				request.library.output ()
 				request.library.seo ()
 				request.theme = new php.theme (request.app.theme, request.output.theme_url)
@@ -119,7 +116,7 @@ app.get ("/", async function (request: any, response: any, next: any) {
 	request.output ["page:is"] = "index"
 	// var layout = request.theme.layout ("index").set ({}, 5)
 	// var body = request.theme.layout ("base").set ({body: layout}, 2)
-	var body = request.theme.layout ["base"].join ("\n")
+	var body = request.theme.layout ("base").set ({body: "Hello World"}, 2)
 	return response.output (body)
 	})
 
@@ -289,15 +286,15 @@ var library : any = class {
 		this.next = next
 		}
 	async output () {
-		if  (__config.deployment === "local") {
+		if  ($__config.deployment === "local") {
 			this.request.output.asset_url = this.request.base_url + $__route ["$"].asset_uri
 			this.request.output.static_url = this.request.base_url + $__route ["$"].static_uri
 			this.request.output.theme_url = this.request.base_url + $__route ["$"].theme_uri
 			}
-		if  (__config.deployment === "live") {
-			this.request.output.asset_url = __config ["asset:url"] + $__route ["$"].asset_uri
-			this.request.output.static_url = __config ["static:url"] + $__route ["$"].static_uri
-			this.request.output.theme_url = __config ["theme:url"] + $__route ["$"].theme_uri
+		if  ($__config.deployment === "live") {
+			this.request.output.asset_url = $__config ["asset:url"] + $__route ["$"].asset_uri
+			this.request.output.static_url = $__config ["static:url"] + $__route ["$"].static_uri
+			this.request.output.theme_url = $__config ["theme:url"] + $__route ["$"].theme_uri
 			}
 		this.request.output.theme_id = this.request.config.theme.id
 		this.request.output.theme_name = this.request.config.theme.name

@@ -50,11 +50,11 @@ php.is_agent_crawler = function (agent: string) {
 	return false;
 	}
 
-php.render = function (markup: any, variable: any = {}, tab_s: number = 0) {
+php.render = function (markup: any, variable: any = {}, tab: number = 0) {
 	if (Array.isArray (markup)) {
-		if (tab_s) markup = markup.map (function (markup) {
+		if (tab) markup = markup.map (function (markup) {
 			if (markup.startsWith (php.render.tag.open)) return markup;
-			else return ("\t").repeat (tab_s) + markup;
+			else return ("\t").repeat (tab) + markup;
 			});
 		markup = markup.join ("\n");
 		}
@@ -66,11 +66,9 @@ php.render = function (markup: any, variable: any = {}, tab_s: number = 0) {
 	return markup;
 	}
 
-php.render.tag = function (key: string) {
-	return php.render.tag.open + key + php.render.tag.close;
-	}
-php.render.tag.open = "{{ ";
-php.render.tag.close = " }}";
+php.render.tag = function (key: string) { return [php.render.tag.open, key, php.render.tag.close].join (" "); }
+php.render.tag.open = "{{";
+php.render.tag.close = "}}";
 
 php.markup = class {
 	data: any = [];
