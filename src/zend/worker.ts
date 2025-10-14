@@ -1,18 +1,29 @@
 import php, {express} from "../zend/engine";
 import __config from "../config.json";
 import __theme from "../db/theme.json";
-import __app from "../application/app.json";
-import $__route from "../application/route.json";
-const __route : any = $__route;
+import app_ls from "../application/app.json";
+let ls : any = app_ls;
+import app_route from "../application/route.json";
+let route : any = app_route;
 
 php.worker = class {
 	app: express;
-	route: any;
+	route: any = route;
+	list: any = ls;
 	constructor (app: express, context: any) {
 		this.app = app;
 		if (context) this.start (context);
 		}
 	start (context: any) {
+		for (var i in this.list) {
+			if (this.list [i].sub) {
+				if (this.list [i].sub.length) {
+					for (var x in this.list [i].sub) {
+						this.list [[this.list [i].sub [x], i].join (".")] = this.list [i]
+						}
+					}
+				}
+			}
 		var _ = function (worker: any) {
 			return function (io: any, next: any) {
 				var {request, response} = php.worker.io (io);
@@ -79,12 +90,12 @@ php.worker.io.request = function (io: any) {
 	request.visitor = {agent: request.header ["user-agent"], "agent:crawler": false, country: {code: io.req.raw.cf.country, region: {code: io.req.raw.cf.regionCode, name: io.req.raw.cf.region, city: {name: io.req.raw.cf.city, postal: {code: io.req.raw.cf.postalCode}}}}, latitude: io.req.raw.cf.latitude, longitude: io.req.raw.cf.longitude, internet: {organization: io.req.raw.cf.asOrganization}, timezone: io.req.raw.cf.timezone}
 	if (php.is_agent_crawler (request.visitor.agent)) request.visitor ["agent:crawler"] = true;
 	request.organic = function () { return ! request.visitor ["agent:crawler"]; }
-	request.output = {route: [], base_url: request.base_url, canonical_url: request.canonical_url, theme_id: "default", theme_version: "0.0.0", theme_version_check: "0.0.0"}
-	for (var i in __route) {
+	request.output = {route: [], base_url: request.base_url, canonical_url: request.canonical_url, theme_id: "default", theme_version: "0.0.0", latest: "0.0.0"}
+	for (var i in route) {
 		if (i === "$") continue;
-		else if (typeof __route [i] === "string") {
-			request.output.route.push (`"${i}": "${__route [i]}"`)
-			request.output [["route", i].join (" ")] = __route [i];
+		else if (typeof route [i] === "string") {
+			request.output.route.push (`"${i}": "${route [i]}"`)
+			request.output [["route", i].join (" ")] = route [i];
 			}
 		}
 	request.output.route = request.output.route.join (", ");

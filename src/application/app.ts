@@ -30,18 +30,12 @@ import "../zend/worker"
 
 import "../plugin/TMDB"
 
-import _config from "../config.json"
-let $__config : any = _config
+import configuration from "../config.json"
+let conf : any = configuration
 
 import _theme from "../db/theme.json"
 let $__theme : any = {}
 for (var i in _theme) $__theme [_theme [i].id] = _theme [i]
-
-import _app from "../application/app.json"
-let $__app : any = _app
-
-import _route from "../application/route.json"
-let $__route : any = _route
 
 var {ln, ln_r} = php.constant
 var {lib} = php
@@ -59,31 +53,35 @@ var {lib} = php
 var app = new php.worker (php.express)
 app.start (async function (request: any, response: any, next: any) {
 	await libraries (request, response, next)
-	if (request.error ["found"] === "host") return response ("host not found", 404)
+	if (request.error ["found"] === "host") return response (php.error.HOST_NOT_FOUND, php.error.found)
+	if (request.error ["forbidden"] === "agent") return response (php.error.VISITOR_AGENT, php.error.forbidden)
 	else return next ()
 	})
 
 async function libraries (request: any, response: any, next: any) {
-	if (request.app.host in $__app) {
-		request.app.theme = {id: $__app [request.app.host].theme.id}
-		if ($__app [request.app.host].theme.version) {}
-		else request.app.theme.version = $__theme [request.app.theme.id].version.last ()
-		request.TMDB = new php.plugin.TMDB ($__config ["TMDB:api"], request)
-		request.library = new library (request, response, next)
-		return php.promise (function (resolve: any, reject: any) {
-			var then : any = function () {
-				then.queue.push (true)
-				if (then.queue.length > 1) resolve ()
-				}
-			then.queue = []
-			lib.timeout (async function () {
-				request.config = ($__config)
-				request.library.output ()
-				request.library.seo ()
-				request.theme = new php.theme (request.app.theme, request.output.theme_url)
-				await request.theme.fetch ()
-				resolve ()
+	if (request.app.host in app.list) {
+		if (request.organic ()) {
+			if (request.app.theme = {id: app.list [request.app.host].theme.id})
+			if (app.list [request.app.host].theme.version) {} else request.app.theme.version = $__theme [request.app.theme.id].version.last ()
+			if (request.library = new library (request, response, next)) return php.promise (function (resolve: any, reject: any) {
+				var then : any = function () {
+					then.queue.push (true)
+					if (then.queue.length > 1) resolve ()
+					}
+				then.queue = []
+				lib.timeout (async function () {
+					request.config = (conf)
+					request.library.output ()
+					request.library.seo ()
+					request.theme = new php.theme (request.app.theme, request.output.theme_url)
+					await request.theme.fetch ()
+					resolve ()
+					})
 				})
+			}
+		else return php.promise (function (resolve: any, reject: any) {
+			request.error ["forbidden"] = "agent"
+			resolve ()
 			})
 		}
 	else return php.promise (function (resolve: any, reject: any) {
@@ -130,15 +128,15 @@ app.get ("/", async function (request: any, response: any, next: any) {
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get ($__route.page ["privacy"], function (request: any, response: any, next: any) {
+app.get (app.route.page ["privacy"], function (request: any, response: any, next: any) {
 	return response ("privacy")
 	})
 
-app.get ($__route.page ["privacy-policy"], function (request: any, response: any, next: any) {
+app.get (app.route.page ["privacy-policy"], function (request: any, response: any, next: any) {
 	return response ("privacy policy")
 	})
 
-app.get ($__route.page ["privacy-policy:content"], function (request: any, response: any, next: any) {
+app.get (app.route.page ["privacy-policy:content"], function (request: any, response: any, next: any) {
 	return response ("privacy policy content")
 	})
 
@@ -152,19 +150,19 @@ app.get ($__route.page ["privacy-policy:content"], function (request: any, respo
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get ($__route.archive, function (request: any, response: any, next: any) {
+app.get (app.route.archive, function (request: any, response: any, next: any) {
 	return response ("archive index")
 	})
 
-app.get ($__route ["archive:year"], function (request: any, response: any, next: any) {
+app.get (app.route ["archive:year"], function (request: any, response: any, next: any) {
 	return response ("archive year")
 	})
 
-app.get ($__route ["archive:month"], function (request: any, response: any, next: any) {
+app.get (app.route ["archive:month"], function (request: any, response: any, next: any) {
 	return response ("archive month")
 	})
 
-app.get ($__route ["archive:day"], function (request: any, response: any, next: any) {
+app.get (app.route ["archive:day"], function (request: any, response: any, next: any) {
 	return response ("archive day")
 	})
 
@@ -178,19 +176,19 @@ app.get ($__route ["archive:day"], function (request: any, response: any, next: 
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get ($__route.movie, async function (request: any, response: any, next: any) {
+app.get (app.route.movie, async function (request: any, response: any, next: any) {
 	return response ("movie index")
 	})
 
-app.get ($__route ["movie:watch"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:watch"], async function (request: any, response: any, next: any) {
 	return response ("movie watch")
 	})
 
-app.get ($__route ["movie:discover"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:discover"], async function (request: any, response: any, next: any) {
 	return response ("movie discover")
 	})
 
-app.get ($__route ["movie:popular"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:popular"], async function (request: any, response: any, next: any) {
 	var html = []
 	if (request.organic ()) {
 		var data = await request.TMDB.movie.popular ({page: request.url.query.get ("page")})
@@ -206,19 +204,19 @@ app.get ($__route ["movie:popular"], async function (request: any, response: any
 	return response (php.html ["output"] (html.join ("")))
 	})
 
-app.get ($__route ["movie:now_playing"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:now_playing"], async function (request: any, response: any, next: any) {
 	return response ("movie now_playing")
 	})
 
-app.get ($__route ["movie:top_rated"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:top_rated"], async function (request: any, response: any, next: any) {
 	return response ("movie top_rated")
 	})
 
-app.get ($__route ["movie:up_coming"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:up_coming"], async function (request: any, response: any, next: any) {
 	return response ("movie up_coming")
 	})
 
-app.get ($__route ["movie:single"], async function (request: any, response: any, next: any) {
+app.get (app.route ["movie:single"], async function (request: any, response: any, next: any) {
 	return response ("movie single")
 	})
 
@@ -232,7 +230,7 @@ app.get ($__route ["movie:single"], async function (request: any, response: any,
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get ($__route.movie.path, async function (request: any, response: any, next: any) {
+app.get (app.route.movie.path, async function (request: any, response: any, next: any) {
 	return next ()
 	})
 
@@ -246,7 +244,7 @@ app.get ($__route.movie.path, async function (request: any, response: any, next:
  * xxx://xxx.xxx.xxx/xxx
  */
 
-app.get ($__route.path, function (request: any, response: any, next: any) {
+app.get (app.route.path, function (request: any, response: any, next: any) {
 	console.log ("path : ", request.url.path)
 	console.log ("path : ", request.url.param ("path"))
 	return next ()
@@ -284,21 +282,24 @@ var library : any = class {
 		this.request = request
 		this.response = response
 		this.next = next
+		this.plugin ()
+		}
+	plugin () {
+		this.request.TMDB = new php.plugin.TMDB (conf ["TMDB:api"], this.request)
 		}
 	async output () {
-		if  ($__config.deployment === "local") {
-			this.request.output.asset_url = this.request.base_url + $__route ["$"].asset_uri
-			this.request.output.static_url = this.request.base_url + $__route ["$"].static_uri
-			this.request.output.theme_url = this.request.base_url + $__route ["$"].theme_uri
+		if  (conf.deployment === "local") {
+			this.request.output.asset_url = this.request.base_url + app.route ["$"].asset_uri
+			this.request.output.static_url = this.request.base_url + app.route ["$"].static_uri
+			this.request.output.theme_url = this.request.base_url + app.route ["$"].theme_uri
 			}
-		if  ($__config.deployment === "live") {
-			this.request.output.asset_url = $__config ["asset:url"] + $__route ["$"].asset_uri
-			this.request.output.static_url = $__config ["static:url"] + $__route ["$"].static_uri
-			this.request.output.theme_url = $__config ["theme:url"] + $__route ["$"].theme_uri
+		if  (conf.deployment === "live") {
+			this.request.output.asset_url = conf ["asset:url"] + app.route ["$"].asset_uri
+			this.request.output.static_url = conf ["static:url"] + app.route ["$"].static_uri
+			this.request.output.theme_url = conf ["theme:url"] + app.route ["$"].theme_uri
 			}
-		this.request.output.theme_id = this.request.config.theme.id
-		this.request.output.theme_name = this.request.config.theme.name
-		this.request.output.theme_version = this.request.config.theme.version
+		this.request.output.latest = conf.latest
+		this.request.output.theme_id = this.request.app.theme.id
 		}
 	async seo () {
 		this.request.output ["og:site-name"] = ""

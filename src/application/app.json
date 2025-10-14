@@ -1,6 +1,7 @@
 {
-"bioskopress.com": {"theme": {"id": "youtube"}},
+"bioskopress.com": {"sub": [], "alias": [], "theme": {"id": "youtube"}},
 "bioskopress.online": {"theme": {"id": "youtube"}},
 "cinemamovie.online": {"theme": {"id": "youtube"}},
+"contentify.com": {"sub": ["www"], "theme": {"id": "youtube"}},
 "127.0.0.1": {"theme": {"id": "youtube"}}
 }

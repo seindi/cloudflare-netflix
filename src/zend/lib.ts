@@ -10,6 +10,12 @@ php.lib.timeout = function (context: any, time: number = php.lib.timeout.dummy) 
 php.lib.timeout.clear = function (timeout: any) { return clearTimeout (timeout); }
 php.lib.timeout.dummy = 88;
 
+php.error = class {}
+php.error.HOST_NOT_FOUND = "Host not Found";
+php.error.VISITOR_AGENT = "";
+php.error.forbidden = 403;
+php.error.found = 404;
+
 php.promise = function (context: any) { return new Promise (function (resolve, reject) { context (function (value: any = true) { resolve (value); }, function (value: any = false) { reject (value); }); }); }
 
 php.parse_url = function (input: string) {
@@ -115,7 +121,7 @@ php.output = function (output: string) {
 	markup.push (2, `<meta property="og:locale" content="en_US"></meta>`);
 	markup.push (2, `<link rel="profile" href="https://gmpg.org/xfn/11">`);
 	markup.push (2, `<link rel="canonical" href="{{ canonical_url }}">`);
-	markup.push (2, `<link rel="manifest" href="{{ asset_url }}/manifest.json">`);
+	markup.push (2, `<link rel="manifest" href="{{ base_url }}/manifest.json">`);
 	markup.push (2, `<link rel="alternate" href="{{ base_url }}/feed" type="application/rss+xml" title="&raquo; Feed">`);
 	markup.push (2, `<link rel="alternate" href="{{ base_url }}/feed/atom" type="application/atom+xml" title="&raquo; Feed (Atom)">`);
 	markup.push (2, `<link rel="search" href="{{ base_url }}/opensearch.xml" type="application/opensearchdescription+xml" title="">`);
@@ -168,7 +174,7 @@ php.output = function (output: string) {
 	return markup.data.join ("\n");
 	}
 
-php.base_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ base_url }}" + path; }
-php.asset_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ asset_url }}/" + path; }
-php.static_uri = function (path: string, version: string = "{{ theme_version }}") { if (version) path = path + "?version=" + version; return "{{ static_url }}/" + path; }
-php.theme_uri = function (path: string, version: string = "{{ theme_version }}") { return "{{ theme_url }}/{{ theme_id }}/" + version + "/" + path + "?version={{ theme_version_check }}"; }
+php.base_uri = function (path: string, latest: string = "{{ latest }}") { if (latest) path = path + "?latest=" + latest; return "{{ base_url }}" + path; }
+php.asset_uri = function (path: string, latest: string = "{{ latest }}") { if (latest) path = path + "?latest=" + latest; return "{{ asset_url }}/" + path; }
+php.static_uri = function (path: string, latest: string = "{{ latest }}") { if (latest) path = path + "?latest=" + latest; return "{{ static_url }}/" + path; }
+php.theme_uri = function (path: string, version: string = "{{ theme_version }}") { return "{{ theme_url }}/{{ theme_id }}/" + version + "/" + path + "?latest={{ latest }}"; }
