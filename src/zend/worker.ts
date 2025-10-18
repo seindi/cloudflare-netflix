@@ -19,7 +19,7 @@ php.worker = class {
 			if (this.list [i].sub) {
 				if (this.list [i].sub.length) {
 					for (var x in this.list [i].sub) {
-						this.list [[this.list [i].sub [x], i].join (".")] = this.list [i]
+						this.list [[this.list [i].sub [x], i].join (".")] = this.list [i];
 						}
 					}
 				}

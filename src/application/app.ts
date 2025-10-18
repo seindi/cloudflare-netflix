@@ -20,14 +20,12 @@
 
 import php, {express} from "../zend/engine"
 import "../zend/lib"
-// import "../zend/library"
+import "../zend/library"
 import "../zend/constant"
-// import "../zend/db"
+import "../zend/db"
 import "../zend/theme"
-// import "../zend/template"
-// import "../zend/express"
+import "../zend/template"
 import "../zend/worker"
-
 import "../plugin/TMDB"
 
 import configuration from "../config.json"
@@ -114,7 +112,11 @@ app.get ("/", async function (request: any, response: any, next: any) {
 	request.output ["page:is"] = "index"
 	// var layout = request.theme.layout ("index").set ({}, 5)
 	// var body = request.theme.layout ("base").set ({body: layout}, 2)
-	var body = request.theme.layout ("base").set ({body: "Hello World"}, 2)
+	var menu_list = request.theme.component ("menu:anchor").set ({}, 8)
+	var layout = request.theme.layout ("index").set ({}, 5)
+	// var layout = request.theme.layout ("index").set ({"location menu:list": [menu_list, menu_list, menu_list]}, 5)
+	var body = request.theme.layout ("base").set ({body: layout}, 2)
+	body = php.render (body, {"location menu:list": [menu_list, menu_list, menu_list]})
 	return response.output (body)
 	})
 

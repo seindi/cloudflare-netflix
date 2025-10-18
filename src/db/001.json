@@ -15,7 +15,8 @@
 			{"title": "Watch Later", "icon": "home"},
 			{"title": "Playlist", "icon": "home"}
 			]
-		}}
+		}},
+	{}
 	],
 "*": "*"
 }

@@ -1,7 +1,7 @@
 {
 "deployment": "local",
 "deployment:internet": true,
-"latest": "0.0.1",
+"latest": "0.0.0",
 "asset:url": "https://cloudflare-io.github.io",
 "static:url": "https://cloudflare-io.github.io",
 "theme:url": "https://cloudflare-io.github.io",
